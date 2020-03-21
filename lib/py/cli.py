@@ -340,6 +340,8 @@ explorers = {
 def explore(opts):
     explorers[opts['what']](opts)
 
+def anonymize(opts):
+    print(opts)
 
 def main():
     desc = 'CRiu Image Tool'
@@ -399,6 +401,20 @@ def main():
                              help='do not show entry payload (if exists)',
                              action='store_true')
     show_parser.set_defaults(func=decode, pretty=True, out=None)
+
+    # shred
+    anonymize_parser = subparsers.add_parser(
+        'shred', help='removes sensitive information from the image file')
+    anonymize_parser.add_argument(
+        '-i',
+        '--in',
+        help='criu image in binary format to be shredded (stdin by default)')
+    anonymize_parser.add_argument(
+        '-o',
+        '--out',
+        help='where to put shredded criu image (stdout by default)')
+    anonymize_parser.set_defaults(func=anonymize, nopl=False)
+
 
     opts = vars(parser.parse_args())
 
