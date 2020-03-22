@@ -5,6 +5,7 @@ import json
 import os
 
 import pycriu
+import anonymize
 
 
 def inf(opts):
@@ -340,8 +341,16 @@ explorers = {
 def explore(opts):
     explorers[opts['what']](opts)
 
-def anonymize(opts):
-    print(opts)
+def shred(opts):
+    try:
+        img = pycriu.images.load(inf(opts))
+    except pycriu.images.MagicException as exc:
+        print("Unknown magic %#x.\n"\
+          "Maybe you are feeding me an image with "\
+          "raw data(i.e. pages.img)?" % exc.magic, file=sys.stderr)
+        sys.exit(1)
+    anonymize.main(inf(opts))
+    #pycriu.images.dump(img, outf(opts))
 
 def main():
     desc = 'CRiu Image Tool'
@@ -413,7 +422,7 @@ def main():
         '-o',
         '--out',
         help='where to put shredded criu image (stdout by default)')
-    anonymize_parser.set_defaults(func=anonymize, nopl=False)
+    anonymize_parser.set_defaults(func=shred, nopl=False)
 
 
     opts = vars(parser.parse_args())
