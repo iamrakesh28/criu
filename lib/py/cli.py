@@ -5,7 +5,6 @@ import json
 import os
 
 import pycriu
-import anonymize
 
 
 def inf(opts):
@@ -349,8 +348,8 @@ def shred(opts):
           "Maybe you are feeding me an image with "\
           "raw data(i.e. pages.img)?" % exc.magic, file=sys.stderr)
         sys.exit(1)
-    anonymize.main(inf(opts))
-    #pycriu.images.dump(img, outf(opts))
+    img = pycriu.anonymize.main(img)
+    pycriu.images.dump(img, outf(opts))
 
 def main():
     desc = 'CRiu Image Tool'
