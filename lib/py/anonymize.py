@@ -1,9 +1,10 @@
 import struct
 
-import pagemap
+from . import imgdump
     
 handlers = {
-    'PAGEMAP': pagemap.shred
+    'PAGEMAP': imgdump.pagemap.shred,
+    'MM': imgdump.mm.shred
 }
 
 
@@ -11,4 +12,4 @@ def main(image):
     magic = image['magic']
     entries = handlers[magic](image['entries'])
     image['entries'] = entries
-    return images
+    return image
